@@ -1,0 +1,40 @@
+# https://github.com/nicklockwood/SwiftFormat
+# made for SwiftFormat 0.47.13
+
+### rules
+# rules disabled by default:
+	# isEmpty
+	# markTypes
+	# organizeDeclarations
+	# sortedSwitchCases
+	# wrapEnumCases
+	# wrapSwitchCases
+
+--enable isEmpty
+--disable fileHeader, hoistPatternLet
+
+### options
+
+# sortedImports
+--importgrouping testable-last
+
+#indent
+--indent 2
+
+# redundantSelf
+--self init-only
+
+# wrapArguments
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen same-line
+--wrapconditions before-first
+
+# wrapAttributes
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes prev-line
+
+# wrap
+--maxwidth 100
