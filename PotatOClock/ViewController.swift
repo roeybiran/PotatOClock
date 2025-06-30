@@ -13,7 +13,6 @@ class ViewController: NSViewController {
   let viewModel = ViewModel()
 
   override func viewDidLoad() {
-
     super.viewDidLoad()
     if let view = skView {
       scene!.scaleMode = .aspectFill

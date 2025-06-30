@@ -5,41 +5,10 @@ import SpriteKit
 
 
 class GameScene: SKScene {
-  private var potato: SKSpriteNode!
 
-  private let potatoTextures: [[SKTexture]] = [
-    [SKTexture(imageNamed: "stage1-1"), SKTexture(imageNamed: "stage1-2")],
-    [SKTexture(imageNamed: "stage2-1"), SKTexture(imageNamed: "stage2-2")],
-    [SKTexture(imageNamed: "stage3-1"), SKTexture(imageNamed: "stage3-2")],
-    [SKTexture(imageNamed: "stage4-1"), SKTexture(imageNamed: "stage4-2")],
-    [SKTexture(imageNamed: "dead")]
-  ]
-
-  private let bubbleTextures = [
-    SKTexture(imageNamed: "bubbles-1"),
-    SKTexture(imageNamed: "bubbles-2")
-  ]
-
-  private let POTATO_OFFSET = -10
-  private let GAME_STAGES = PotatoState.allCases.count
-  private let water = SKSpriteNode(texture: SKTexture(imageNamed: "water"))
-  private var pedestal: SKShapeNode!
-  private let pedestalColor = NSColor(calibratedRed: 196 / 255, green: 196 / 255, blue: 196 / 255, alpha: 1)
-  private let skyColor = NSColor(calibratedRed: 138 / 255, green: 196 / 255, blue: 215 / 255, alpha: 1)
-  private let waterColor = NSColor(calibratedRed: 1 / 255, green: 142 / 255, blue: 220 / 255, alpha: 1)
-  private let strokeColor = NSColor.black
-  private let waterSurfaceAction = SKAction
-    .repeatForever(
-      .sequence([
-        .moveBy(x: 4, y: -2, duration: 0.3),
-        .moveBy(x: -4, y: 2, duration: 0.3),
-        .moveBy(x: -4, y: 2, duration: 0.3),
-        .moveBy(x: 4, y: -2, duration: 0.3)
-      ])
-    )
+  // MARK: Internal
 
   override func didMove(to _: SKView) {
-
     let sky = SKShapeNode(rect: frame)
     sky.strokeColor = strokeColor
     sky.fillColor = skyColor
@@ -66,19 +35,17 @@ class GameScene: SKScene {
     water2.run(.sequence([
       .wait(forDuration: 0.3),
       waterSurfaceAction
-        .reversed()
+        .reversed(),
     ]))
     water.addChild(water2)
 
     let bubbles = SKSpriteNode(texture: bubbleTextures.first)
     bubbles.run(
       .repeatForever(
-        .animate(with: bubbleTextures, timePerFrame: 0.3)
-      )
-    )
+        .animate(with: bubbleTextures, timePerFrame: 0.3)))
     water.addChild(bubbles)
     bubbles.position.y = water.frame.height
-    
+
     physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
 
     potato = SKSpriteNode(texture: potatoTextures.first!.first)
@@ -88,7 +55,6 @@ class GameScene: SKScene {
     potato.physicsBody = SKPhysicsBody(circleOfRadius: potato.size.width * 0.4)
     potato.physicsBody?.affectedByGravity = false
     addChild(potato)
-
   }
 
   func updateScene(with state: PotatoState) {
@@ -106,9 +72,7 @@ class GameScene: SKScene {
 
     potato.run(
       .repeatForever(
-        .animate(with: textures, timePerFrame: 0.3, resize: true, restore: false)
-      )
-    )
+        .animate(with: textures, timePerFrame: 0.3, resize: true, restore: false)))
 
     if state == .death {
       potato.run(.group([
@@ -117,11 +81,44 @@ class GameScene: SKScene {
         .repeatForever(
           .sequence([
             .rotate(byAngle: -0.5, duration: 20),
-            .rotate(byAngle: 0.5, duration: 20)
-          ])
-        )
+            .rotate(byAngle: 0.5, duration: 20),
+          ])),
       ]))
     }
-
   }
+
+  // MARK: Private
+
+  private var potato: SKSpriteNode!
+
+  private let potatoTextures: [[SKTexture]] = [
+    [SKTexture(imageNamed: "stage1-1"), SKTexture(imageNamed: "stage1-2")],
+    [SKTexture(imageNamed: "stage2-1"), SKTexture(imageNamed: "stage2-2")],
+    [SKTexture(imageNamed: "stage3-1"), SKTexture(imageNamed: "stage3-2")],
+    [SKTexture(imageNamed: "stage4-1"), SKTexture(imageNamed: "stage4-2")],
+    [SKTexture(imageNamed: "dead")],
+  ]
+
+  private let bubbleTextures = [
+    SKTexture(imageNamed: "bubbles-1"),
+    SKTexture(imageNamed: "bubbles-2"),
+  ]
+
+  private let POTATO_OFFSET = -10
+  private let GAME_STAGES = PotatoState.allCases.count
+  private let water = SKSpriteNode(texture: SKTexture(imageNamed: "water"))
+  private var pedestal: SKShapeNode!
+  private let pedestalColor = NSColor(calibratedRed: 196 / 255, green: 196 / 255, blue: 196 / 255, alpha: 1)
+  private let skyColor = NSColor(calibratedRed: 138 / 255, green: 196 / 255, blue: 215 / 255, alpha: 1)
+  private let waterColor = NSColor(calibratedRed: 1 / 255, green: 142 / 255, blue: 220 / 255, alpha: 1)
+  private let strokeColor = NSColor.black
+  private let waterSurfaceAction = SKAction
+    .repeatForever(
+      .sequence([
+        .moveBy(x: 4, y: -2, duration: 0.3),
+        .moveBy(x: -4, y: 2, duration: 0.3),
+        .moveBy(x: -4, y: 2, duration: 0.3),
+        .moveBy(x: 4, y: -2, duration: 0.3),
+      ]))
+
 }

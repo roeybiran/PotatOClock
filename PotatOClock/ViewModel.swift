@@ -2,6 +2,8 @@
 
 import Foundation
 
+// MARK: - PotatoState
+
 enum PotatoState: Int, CaseIterable {
   case whistling
   case angry
@@ -12,14 +14,37 @@ enum PotatoState: Int, CaseIterable {
 
 private let DEBUG_SEGMENT_LENGTH = 3
 
+// MARK: - ViewModel
+
 class ViewModel {
-  private enum UserStatus {
-    case standing, sitting
+
+  // MARK: Lifecycle
+
+  init() {
+    sessionTimer = Timer.scheduledTimer(
+      withTimeInterval: 1.0,
+      repeats: true,
+      block: onTick)
+    sessionTimer!.tolerance = 0.2
   }
 
+  // MARK: Internal
+
   var potatoState = Binding<PotatoState>(.whistling)
+
   var isSitting: Bool {
     userStatus == .sitting
+  }
+
+  // arduino input should be directed here
+  func toggleStatus() {
+    userStatus = userStatus == .sitting ? .standing : .sitting
+  }
+
+  // MARK: Private
+
+  private enum UserStatus {
+    case standing, sitting
   }
 
   private var userStatus: UserStatus?
@@ -30,14 +55,6 @@ class ViewModel {
   private let sessionDuration = DEBUG_SEGMENT_LENGTH * PotatoState.allCases.count
 
   private var sessionTimer: Timer?
-
-  init() {
-    sessionTimer = Timer.scheduledTimer(
-      withTimeInterval: 1.0,
-      repeats: true,
-      block: onTick)
-    sessionTimer!.tolerance = 0.2
-  }
 
   private func onTick(_ timer: Timer) {
     guard let status = userStatus else {
@@ -75,8 +92,4 @@ class ViewModel {
     }
   }
 
-  // arduino input should be directed here
-  func toggleStatus() {
-    userStatus = userStatus == .sitting ? .standing : .sitting
-  }
 }

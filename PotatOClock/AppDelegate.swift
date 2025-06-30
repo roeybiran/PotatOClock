@@ -2,6 +2,8 @@
 
 import Cocoa
 
+// MARK: - AppDelegate
+
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
   var statusItem: NSStatusItem?
@@ -48,6 +50,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         animate: true)
   }
 }
+
+// MARK: NSUserInterfaceValidations
 
 extension AppDelegate: NSUserInterfaceValidations {
   func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
